@@ -520,6 +520,27 @@
   box-shadow: 0 0 0 2px var(--c-ring-offset), 0 0 0 4px var(--c-ring);
 }
 
+/* ---- Salud de la suite: tarjetas-enlace nunca azul "sin estilo" ----------
+   ServiceHealthGrid de prizma-ui renderiza cada servicio con dominio público
+   como <a class="cui-svc-grid__card cui-svc-grid__card--link …">. El paquete
+   pone text-decoration:none pero NO fija `color`, así que el <a> heredaba el
+   azul del navegador (rgb(0,0,238)). Forzamos el color de texto de marca y que
+   TODO el contenido de la tarjeta (label, latencia, estado) lo herede, igual
+   que el resto de enlaces del Portal. Sin subrayado: la tarjeta entera es el
+   target y ya tiene affordance propio (hover con sombra/borde teal). */
+.cui-svc-grid__card--link,
+.cui-svc-grid__card--link:visited {
+  color: var(--c-text);
+  text-decoration: none;
+}
+.cui-svc-grid__card--link * {
+  color: inherit;
+}
+.cui-svc-grid__card--link:hover,
+.cui-svc-grid__card--link:focus-visible {
+  color: var(--c-text);
+}
+
 /* ---- Spinner del botón "Re-escanear / Verificar salud" ------------------ */
 @keyframes pzl-spin {
   to { transform: rotate(360deg); }

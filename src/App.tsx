@@ -62,6 +62,7 @@ import {
   KPIS,
   NAV_GROUPS,
   PRODUCT_BY_KEY,
+  externalHref,
   type ModuleKey,
 } from "./data";
 
@@ -465,6 +466,7 @@ function ProductView({ moduleKey, onNavigate }: { moduleKey: ModuleKey; onNaviga
       </CardBody></Card>
     );
   }
+  const externalUrl = externalHref(p);
   return (
     <div data-module={moduleKey} style={{ display: "flex", flexDirection: "column", gap: 20, maxWidth: 820 }}>
       {/* Portada de marca como protagonista */}
@@ -510,21 +512,32 @@ function ProductView({ moduleKey, onNavigate }: { moduleKey: ModuleKey; onNaviga
           <span style={{ color: "var(--c-text-muted)" }}>Línea de negocio</span>
           <Badge tone="primary">{p.line}</Badge>
         </div>
-        <div className="cui-row cui-row--between cui-row--wrap" style={{ gap: 8 }}>
-          <span style={{ color: "var(--c-text-muted)" }}>Dirección de la app</span>
-          <code style={{ fontSize: 13 }}>{p.url}</code>
-        </div>
+        {externalUrl && (
+          <div className="cui-row cui-row--between cui-row--wrap" style={{ gap: 8 }}>
+            <span style={{ color: "var(--c-text-muted)" }}>Dirección de la app</span>
+            <code style={{ fontSize: 13 }}>{externalUrl}</code>
+          </div>
+        )}
+        {!externalUrl && (
+          <p style={{ color: "var(--c-text-muted)", margin: 0, fontSize: 14, lineHeight: 1.55 }}>
+            {p.internal || p.line === "Conector"
+              ? "Pieza interna del ecosistema: opera dentro de la suite a través de Nous y no expone una interfaz pública propia."
+              : "Frontend público en preparación: este módulo aún no tiene una dirección pública para abrir."}
+          </p>
+        )}
         <div className="cui-row" style={{ gap: 12, marginTop: 8 }}>
-          {/* A11Y-02: usar <a> directamente con estilos de botón — evita <button> dentro de <a> */}
-          <a
-            href={p.url}
-            target="_blank"
-            rel="noreferrer"
-            className="cui-btn cui-btn--module cui-btn--md"
-            style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
-          >
-            Abrir {p.name} <ArrowUpRight size={16} aria-hidden />
-          </a>
+          {externalUrl && (
+            /* A11Y-02: usar <a> directamente con estilos de botón — evita <button> dentro de <a> */
+            <a
+              href={externalUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="cui-btn cui-btn--module cui-btn--md"
+              style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+            >
+              Abrir {p.name} <ArrowUpRight size={16} aria-hidden />
+            </a>
+          )}
           <Button variant="ghost" size="md" onClick={() => onNavigate("status")}>Ver estado</Button>
         </div>
       </CardBody></Card>

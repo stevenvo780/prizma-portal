@@ -12,7 +12,7 @@
   "dependencies": {
     "lucide-react": "^0.460.0",
     "prizma-brand": "^1.2.0",
-    "prizma-ui": "^1.2.0",
+    "prizma-ui": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import {
   AppShell,
   PrizmaRoot,
@@ -40,6 +41,8 @@ import {
   ArrowUpRight,
   TrendingUp,
   TrendingDown,
+  Info,
+  ArrowLeft,
   type LucideIcon,
 } from "lucide-react";
 import { Gallery } from "./Gallery";
@@ -254,13 +257,21 @@ function Topbar({
         type="button"
         className="pzl-brand"
         onClick={() => onNavigate("home")}
-        aria-label="Ir al inicio de Prizma"
+        aria-label="Ir al inicio del cockpit de Prizma"
       >
         <Symbol size={30} />
         <span className="pzl-brand__word">Prizma</span>
-        <Badge tone="primary">ecosistema</Badge>
+        <Badge tone="primary">demo</Badge>
       </button>
       <div className="cui-spacer" />
+      {/* Vuelta a la landing pública (sale del cockpit de demostración). */}
+      <Link
+        to="/"
+        className="pzl-topbar-secondary pzl-exitdemo"
+        aria-label="Salir de la demo y volver al sitio"
+      >
+        <ArrowLeft size={14} aria-hidden /> Salir de la demo
+      </Link>
       {/* Controles de demo: se ocultan en móvil para que el topbar no desborde. */}
       <span className="pzl-topbar-secondary"><TenantSwitcher /></span>
       <span className="pzl-topbar-secondary"><RoleSelector /></span>
@@ -625,6 +636,26 @@ const SUITE_TOUR_STEPS: TourStep[] = [
   },
 ];
 
+/**
+ * DemoBanner — etiqueta persistente que deja claro que el cockpit corre con
+ * datos de ejemplo. Sticky en la parte alta del contenido para que se vea en
+ * cualquier vista del demo. Incluye un enlace de vuelta a la landing real.
+ */
+function DemoBanner() {
+  return (
+    <div className="pzl-demobanner" role="note">
+      <Info size={15} aria-hidden />
+      <span>
+        <strong>DEMO</strong> — datos de ejemplo. Esta es una vista de prueba de
+        la suite; ningún dato es real.
+      </span>
+      <Link to="/" className="pzl-demobanner__link">
+        Ir al sitio <ArrowRight size={13} aria-hidden />
+      </Link>
+    </div>
+  );
+}
+
 export function App() {
   if (typeof location !== "undefined" && location.search.includes("gallery")) {
     return <Gallery />;
@@ -695,6 +726,7 @@ export function App() {
   return (
     <PrizmaRoot module="portal">
       <AppShell topbar={<Topbar onNavigate={setView} onStartTour={startTour} />} sidebar={<SidebarNav view={view} onNavigate={setView} />}>
+        <DemoBanner />
         {content}
         {/* Tour de la suite — controlado por usePrizmaTour. Se auto-inicia la
             primera vez (ver efecto arriba) y se relanza desde "Ver tutorial". */}

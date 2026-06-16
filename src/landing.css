@@ -1,0 +1,677 @@
+/* ============================================================================
+   landing.css — Landing pública de captación de Prizma (ruta "/").
+
+   NO es el cockpit. Es la cara comercial: hero con la tesis de la suite (un
+   prisma que refracta un haz en el espectro de productos), presentación de cada
+   app, beneficios y contacto real (Steven Vallejo · stevenvallejo780@gmail.com).
+
+   Identidad Cloud Atlas: navy profundo #0A1622, teal corriente (#0E6E73 →
+   #2DCBD1) y acentos oro #e0a85e + vermellón #FF5A2B. Tipografía: Sora (display),
+   Inter (texto), JetBrains Mono (eyebrows/datos). 0 emojis (solo lucide).
+
+   Prefijo propio: lp-  (landing page). No colisiona con cui- ni pzl-.
+   Esta vista vive FUERA del AppShell, así que define su propio chrome sobre el
+   fondo navy de marca; hereda los tokens --c-* del design system donde aplica.
+   ============================================================================ */
+
+/* ---- Lienzo de la landing ----------------------------------------------- */
+.lp {
+  --lp-navy: #0a1622;
+  --lp-navy-2: #0b1417;
+  --lp-teal: #2dcbd1;
+  --lp-teal-deep: #0e6e73;
+  --lp-gold: #e0a85e;
+  --lp-vermilion: #ff5a2b;
+  --lp-ink: #ecfeff;
+  --lp-ink-dim: rgba(236, 254, 255, 0.66);
+  --lp-ink-faint: rgba(236, 254, 255, 0.42);
+  --lp-line: rgba(103, 226, 230, 0.16);
+  --lp-surface: rgba(255, 255, 255, 0.035);
+
+  min-height: 100vh;
+  color: var(--lp-ink);
+  background:
+    radial-gradient(1200px 620px at 78% -8%, rgba(45, 203, 209, 0.16), transparent 60%),
+    radial-gradient(900px 540px at 2% 4%, rgba(14, 110, 115, 0.22), transparent 58%),
+    linear-gradient(180deg, var(--lp-navy-2) 0%, var(--lp-navy) 46%, #07131b 100%);
+  font-family: var(--c-font-body, Inter, system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+.lp ::selection {
+  background: var(--lp-teal);
+  color: var(--lp-navy);
+}
+
+.lp-shell {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 5vw, 48px);
+}
+
+/* ---- Top bar pública ---------------------------------------------------- */
+.lp-top {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-block: 16px;
+  background: color-mix(in srgb, var(--lp-navy-2) 78%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--lp-line);
+}
+.lp-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  color: var(--lp-ink);
+}
+.lp-brand__word {
+  font-family: var(--c-font-display, Sora, sans-serif);
+  font-weight: 700;
+  font-size: 1.32rem;
+  letter-spacing: -0.03em;
+}
+.lp-top__spacer {
+  flex: 1;
+}
+.lp-top__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.lp-navlink {
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding-inline: 14px;
+  border-radius: 999px;
+  color: var(--lp-ink-dim);
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 140ms ease, background 140ms ease;
+}
+.lp-navlink:hover {
+  color: var(--lp-ink);
+  background: var(--lp-surface);
+}
+@media (max-width: 720px) {
+  .lp-navlink--hideable {
+    display: none;
+  }
+}
+/* En móvil estrecho: deja solo marca + CTA; el enlace "Ver demo" se va para
+   que el botón no desborde. La landing ya ofrece "Ver demo" en el hero. */
+@media (max-width: 480px) {
+  .lp-top__links .lp-navlink {
+    display: none;
+  }
+  .lp-top {
+    padding-block: 12px;
+  }
+  .lp-top__links .lp-cta {
+    padding-inline: 14px;
+  }
+}
+.lp-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding-inline: 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: transform 140ms ease, box-shadow 160ms ease, background 160ms ease,
+    border-color 140ms ease, color 140ms ease;
+}
+.lp-cta--solid {
+  background: linear-gradient(95deg, var(--lp-teal-deep), var(--lp-teal));
+  color: #042024;
+  box-shadow: 0 8px 24px -10px rgba(45, 203, 209, 0.7);
+}
+.lp-cta--solid:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -10px rgba(45, 203, 209, 0.78);
+}
+.lp-cta--ghost {
+  background: transparent;
+  color: var(--lp-ink);
+  border-color: rgba(103, 226, 230, 0.3);
+}
+.lp-cta--ghost:hover {
+  background: var(--lp-surface);
+  border-color: var(--lp-teal);
+}
+.lp-cta--lg {
+  height: 50px;
+  padding-inline: 26px;
+  font-size: 1rem;
+}
+
+/* ---- Eyebrow compartido ------------------------------------------------- */
+.lp-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--c-font-mono, "JetBrains Mono", monospace);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--lp-teal);
+}
+.lp-eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lp-vermilion);
+  box-shadow: 0 0 0 4px rgba(255, 90, 43, 0.18);
+}
+
+/* ===========================================================================
+   HERO — la firma: un haz blanco entra al prisma y sale como el espectro de
+   productos. La refracción ES la tesis: un solo sistema, cinco capacidades.
+   =========================================================================== */
+.lp-hero {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+  padding-block: clamp(56px, 9vw, 116px) clamp(40px, 6vw, 80px);
+}
+@media (max-width: 920px) {
+  .lp-hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+.lp-hero__copy {
+  max-width: 36ch;
+}
+.lp-hero h1 {
+  font-family: var(--c-font-display, Sora, sans-serif);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 5.6vw, 4.05rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  margin: 20px 0 0;
+  text-wrap: balance;
+}
+.lp-hero h1 em {
+  font-style: normal;
+  background: linear-gradient(96deg, var(--lp-teal) 0%, #67e2e6 42%, var(--lp-gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.lp-hero__lede {
+  font-size: clamp(1.04rem, 1.5vw, 1.22rem);
+  line-height: 1.6;
+  color: var(--lp-ink-dim);
+  margin: 22px 0 0;
+  max-width: 46ch;
+}
+.lp-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 34px;
+}
+.lp-hero__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 30px;
+  font-size: 0.82rem;
+  color: var(--lp-ink-faint);
+}
+.lp-hero__trust span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* ---- Prisma SVG: panel de refracción ------------------------------------ */
+.lp-prism {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+}
+.lp-prism svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+/* El haz de entrada late suavemente; los rayos se "encienden" en cascada. */
+@keyframes lp-beam {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+@keyframes lp-ray-in {
+  from { opacity: 0; stroke-dashoffset: 280; }
+  to { opacity: 1; stroke-dashoffset: 0; }
+}
+.lp-prism__beam {
+  animation: lp-beam 4.2s ease-in-out infinite;
+}
+.lp-prism__ray {
+  stroke-dasharray: 280;
+  animation: lp-ray-in 900ms var(--lp-ease, cubic-bezier(0.22, 0.61, 0.36, 1)) both;
+}
+.lp-prism__chip {
+  animation: lp-chip-in 700ms ease both;
+}
+@keyframes lp-chip-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.lp-prism__chip text {
+  font-family: var(--c-font-mono, "JetBrains Mono", monospace);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+/* En móvil el prisma se reduce y las etiquetas del espectro se aprietan: se
+   ocultan los textos (los rayos de color siguen contando la historia). */
+@media (max-width: 560px) {
+  .lp-prism__chip text {
+    display: none;
+  }
+}
+
+/* ===========================================================================
+   SECCIÓN genérica
+   =========================================================================== */
+.lp-section {
+  padding-block: clamp(48px, 7vw, 92px);
+}
+.lp-section--alt {
+  background:
+    linear-gradient(180deg, transparent, rgba(7, 19, 27, 0.55) 12%, rgba(7, 19, 27, 0.55) 88%, transparent);
+  border-block: 1px solid var(--lp-line);
+}
+.lp-section__head {
+  max-width: 60ch;
+  margin-bottom: clamp(30px, 4vw, 52px);
+}
+.lp-section__head h2 {
+  font-family: var(--c-font-display, Sora, sans-serif);
+  font-weight: 700;
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin: 14px 0 0;
+  text-wrap: balance;
+}
+.lp-section__head p {
+  font-size: clamp(1rem, 1.3vw, 1.12rem);
+  line-height: 1.6;
+  color: var(--lp-ink-dim);
+  margin: 14px 0 0;
+}
+
+/* ===========================================================================
+   PRODUCTOS — cada app con su portada de marca (protagonista) + descripción
+   =========================================================================== */
+.lp-products {
+  display: grid;
+  gap: clamp(18px, 2vw, 26px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+}
+.lp-product {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--lp-surface);
+  border: 1px solid var(--lp-line);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 200ms ease, box-shadow 240ms ease;
+}
+.lp-product:hover {
+  transform: translateY(-6px);
+  border-color: rgba(103, 226, 230, 0.45);
+  box-shadow: 0 26px 50px -28px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(103, 226, 230, 0.18);
+}
+.lp-product:focus-visible {
+  outline: none;
+  border-color: var(--lp-teal);
+  box-shadow: 0 0 0 3px rgba(45, 203, 209, 0.4);
+}
+.lp-product__media {
+  position: relative;
+  aspect-ratio: 680 / 320;
+  overflow: hidden;
+  background: var(--lp-navy-2);
+}
+.lp-product__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.lp-product:hover .lp-product__media img {
+  transform: scale(1.05);
+}
+.lp-product__tag {
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-family: var(--c-font-mono, "JetBrains Mono", monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lp-ink);
+  background: rgba(7, 19, 27, 0.66);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.lp-product__tag--star {
+  color: #2a1c06;
+  background: var(--lp-gold);
+  border-color: transparent;
+}
+.lp-product__body {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 20px 22px 22px;
+  flex: 1;
+}
+.lp-product__name {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  font-family: var(--c-font-display, Sora, sans-serif);
+  font-weight: 700;
+  font-size: 1.22rem;
+  letter-spacing: -0.01em;
+}
+.lp-product__role {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--lp-teal);
+}
+.lp-product__desc {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--lp-ink-dim);
+  margin: 0;
+}
+.lp-product__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: auto;
+  padding-top: 10px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--lp-ink);
+}
+.lp-product__open svg {
+  transition: transform 180ms ease;
+}
+.lp-product:hover .lp-product__open svg {
+  transform: translate(2px, -2px);
+}
+.lp-product__open--muted {
+  color: var(--lp-ink-faint);
+}
+
+/* ===========================================================================
+   BENEFICIOS — rejilla de razones reales (orquestación, trazabilidad, etc.)
+   =========================================================================== */
+.lp-benefits {
+  display: grid;
+  gap: clamp(16px, 2vw, 24px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+}
+.lp-benefit {
+  padding: 24px 24px 26px;
+  border-radius: 18px;
+  border: 1px solid var(--lp-line);
+  background: var(--lp-surface);
+}
+.lp-benefit__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  color: var(--lp-teal);
+  background: rgba(45, 203, 209, 0.1);
+  border: 1px solid rgba(45, 203, 209, 0.22);
+}
+.lp-benefit h3 {
+  font-family: var(--c-font-display, Sora, sans-serif);
+  font-size: 1.08rem;
+  font-weight: 600;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+.lp-benefit p {
+  font-size: 0.91rem;
+  line-height: 1.55;
+  color: var(--lp-ink-dim);
+  margin: 0;
+}
+
+/* ---- Tira del flujo (orquestado por Nous) ------------------------------- */
+.lp-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 22px;
+  border-radius: 18px;
+  border: 1px dashed var(--lp-line);
+  background: rgba(7, 19, 27, 0.4);
+}
+.lp-flow__step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 15px;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 500;
+  background: var(--lp-surface);
+  border: 1px solid var(--lp-line);
+}
+.lp-flow__step code {
+  font-family: var(--c-font-mono, "JetBrains Mono", monospace);
+  font-size: 0.74rem;
+  color: var(--lp-teal);
+}
+.lp-flow__arrow {
+  color: var(--lp-ink-faint);
+  flex-shrink: 0;
+}
+
+/* ===========================================================================
+   CONTACTO / CTA final
+   =========================================================================== */
+.lp-contact {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  padding: clamp(36px, 6vw, 72px);
+  border: 1px solid rgba(103, 226, 230, 0.22);
+  background:
+    radial-gradient(700px 380px at 88% 20%, rgba(45, 203, 209, 0.2), transparent 62%),
+    radial-gradient(560px 320px at 6% 90%, rgba(224, 168, 94, 0.14), transparent 60%),
+    linear-gradient(150deg, #0c1c25, #08151d);
+}
+.lp-contact__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+@media (max-width: 760px) {
+  .lp-contact__grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+.lp-contact h2 {
+  font-family: var(--c-font-display, Sora, sans-serif);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 3.6vw, 2.7rem);
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  margin: 16px 0 0;
+  text-wrap: balance;
+}
+.lp-contact p {
+  font-size: clamp(1rem, 1.3vw, 1.12rem);
+  line-height: 1.6;
+  color: var(--lp-ink-dim);
+  margin: 16px 0 0;
+  max-width: 44ch;
+}
+.lp-contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 30px;
+}
+.lp-contact__card {
+  padding: 26px;
+  border-radius: 18px;
+  background: rgba(7, 19, 27, 0.55);
+  border: 1px solid var(--lp-line);
+}
+.lp-contact__card dl {
+  margin: 0;
+  display: grid;
+  gap: 16px;
+}
+.lp-contact__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+}
+.lp-contact__row svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--lp-teal);
+}
+.lp-contact__row dt {
+  font-family: var(--c-font-mono, "JetBrains Mono", monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lp-ink-faint);
+  margin-bottom: 3px;
+}
+.lp-contact__row dd {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 500;
+}
+.lp-contact__row a {
+  color: var(--lp-ink);
+  text-decoration: none;
+}
+.lp-contact__row a:hover {
+  color: var(--lp-teal);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---- Footer público ----------------------------------------------------- */
+.lp-foot {
+  border-top: 1px solid var(--lp-line);
+  padding-block: 34px 44px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+  color: var(--lp-ink-faint);
+  font-size: 0.85rem;
+}
+.lp-foot__spacer {
+  flex: 1;
+}
+.lp-foot a {
+  color: var(--lp-ink-dim);
+  text-decoration: none;
+}
+.lp-foot a:hover {
+  color: var(--lp-teal);
+}
+
+/* ---- Foco visible global de la landing ---------------------------------- */
+.lp a:focus-visible,
+.lp button:focus-visible {
+  outline: 2px solid var(--lp-teal);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ---- Reveal al hacer scroll (progresivo, respeta reduced-motion) -------- */
+.lp-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 640ms ease, transform 640ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.lp-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-prism__beam,
+  .lp-prism__ray,
+  .lp-prism__chip {
+    animation: none;
+  }
+  .lp-prism__ray {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  .lp-prism__chip {
+    opacity: 1;
+    transform: none;
+  }
+  .lp-product,
+  .lp-product__media img,
+  .lp-cta,
+  .lp-product__open svg {
+    transition: none;
+  }
+  .lp-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

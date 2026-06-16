@@ -431,6 +431,109 @@
   color: var(--c-text-muted);
 }
 
+/* ---- Sidebar PLANO (override de prizma-ui, scope al portal) -------------
+   Petición del owner: sidebar simple. Sin cajas grises de fondo en los items
+   (prizma-ui pinta hover con --c-surface-sunken y el activo con
+   --c-accent-module-tint + barrita ::before). Aquí los items son SOLO TEXTO
+   sobre fondo transparente; el seleccionado va en NEGRILLA (700) + teal de
+   marca, sin caja ni marcador. Limpio y plano.
+
+   Solo afecta a la barra lateral del shell (.cui-shell__sidebar): no toca la
+   navegación interna de otras vistas ni el paquete prizma-ui. */
+.cui-shell__sidebar .cui-nav__item {
+  background: transparent;
+  /* Los items son <button>: resetear el borde 'outset' por defecto del
+     navegador que, sin caja de fondo, quedaba como un recuadro alrededor. */
+  border: none;
+  border-radius: 0;
+  padding: 8px 12px;
+  color: var(--c-text-muted);
+  font-weight: 500;
+}
+.cui-shell__sidebar .cui-nav__item:hover {
+  background: transparent;
+  color: var(--c-text);
+}
+/* Item seleccionado: negrilla + teal de marca, SIN caja ni barrita. */
+.cui-shell__sidebar .cui-nav__item[data-active="true"] {
+  background: transparent;
+  color: var(--c-primary-text);
+  font-weight: 700;
+}
+/* Mata la barrita/recuadro del estado activo de prizma-ui. */
+.cui-shell__sidebar .cui-nav__item[data-active="true"]::before {
+  display: none;
+  content: none;
+}
+/* Foco visible plano (sin recuadro de fondo, solo el anillo). */
+.cui-shell__sidebar .cui-nav__item:focus-visible {
+  background: transparent;
+}
+
+/* ---- Banner "DEMO — datos de ejemplo" ----------------------------------- */
+.pzl-demobanner {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: -16px -16px 24px;
+  padding: 10px clamp(16px, 3vw, 28px);
+  background: color-mix(in srgb, var(--c-primary) 12%, var(--c-surface));
+  border-bottom: 1px solid color-mix(in srgb, var(--c-primary) 35%, var(--c-border));
+  color: var(--c-text);
+  font-size: var(--c-text-sm);
+  line-height: 1.4;
+}
+.pzl-demobanner svg {
+  color: var(--c-primary-text);
+  flex-shrink: 0;
+}
+.pzl-demobanner strong {
+  font-family: var(--c-font-mono);
+  letter-spacing: 0.08em;
+  color: var(--c-primary-text);
+}
+.pzl-demobanner__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  font-weight: 600;
+  color: var(--c-primary-text) !important;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.pzl-demobanner__link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---- "Salir de la demo" (topbar) ---------------------------------------- */
+.pzl-exitdemo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: var(--c-radius-md);
+  color: var(--c-text-muted);
+  font-size: var(--c-text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--c-duration-fast), background var(--c-duration-fast);
+}
+.pzl-exitdemo:hover {
+  color: var(--c-text);
+  background: var(--c-surface-sunken);
+}
+.pzl-exitdemo:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--c-ring-offset), 0 0 0 4px var(--c-ring);
+}
+
 /* ---- Login shell (placeholder, sin auth falsa) -------------------------- */
 .pzl-login {
   display: inline-flex;

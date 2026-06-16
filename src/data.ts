@@ -58,10 +58,18 @@ export interface Product {
 //
 // Shim: prefiere el prefijo NUEVO (VITE_HERMES_URL…) y cae al VIEJO (VITE_GRAF_URL…)
 // para no romper despliegues que aún tienen los nombres antiguos en Vercel.
+// Una VITE_*_URL vacía ("") en Vercel NO debe ganarle al fallback: con `??`
+// el string vacío se considera "definido" y producía hrefs vacíos -> enlaces
+// muertos. Tratamos "" (y solo-espacios) como ausente y caemos al fallback.
+const pick = (...vals: (string | undefined)[]): string | undefined =>
+  vals.find((v) => typeof v === "string" && v.trim() !== "");
+
 const env = (key: string, fallback: string, legacyKey?: string): string =>
-  (import.meta.env[key] as string | undefined) ??
-  (legacyKey ? (import.meta.env[legacyKey] as string | undefined) : undefined) ??
-  fallback;
+  pick(
+    import.meta.env[key] as string | undefined,
+    legacyKey ? (import.meta.env[legacyKey] as string | undefined) : undefined,
+    fallback,
+  ) ?? fallback;
 
 // Subdominios de producción confirmados por el owner. El DEFAULT de una app de
 // cara al cliente es siempre su subdominio real, de modo que los links abren la
@@ -146,6 +154,31 @@ export const KPIS = [
 
 export const PRODUCT_BY_KEY: Record<string, Product> =
   Object.fromEntries(PRODUCTS.map((p) => [p.key, p]));
+
+/**
+ * URL externa SEGURA para "abrir" un módulo desde el launcher/grid.
+ *
+ * Solo las apps de cara al cliente tienen un frontend público vivo en su
+ * subdominio (root = 200). El resto son conectores internos sin UI (Logos,
+ * Mnemosyne, Nous) o herramientas en desarrollo cuyo dominio aún es un
+ * placeholder (Peitho, Talos): abrir su root daría 404 / DNS fail (enlace
+ * muerto). Para esas, devolvemos `undefined` y la UI navega a la ficha interna
+ * del módulo en lugar de un enlace externo roto.
+ */
+export function externalHref(p: Product): string | undefined {
+  if (!p.customerFacing) return undefined;
+  try {
+    // Debe ser un origin http(s) real, no un localhost de dev ni vacío.
+    const u = new URL(p.url);
+    if (u.protocol !== "http:" && u.protocol !== "https:") return undefined;
+    if (/(^|\.)localhost$/i.test(u.hostname) || u.hostname === "127.0.0.1") {
+      return undefined;
+    }
+    return p.url;
+  } catch {
+    return undefined;
+  }
+}
 
 export interface NavEntry { key: ModuleKey; label: string; icon: LucideIcon }
 export interface NavGroupDef { label: string; items: NavEntry[] }

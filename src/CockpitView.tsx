@@ -49,6 +49,7 @@ import {
   SERVICE_HEALTH,
   PRODUCT_BY_KEY,
   MODULE_ICON,
+  externalHref,
   type ModuleKey,
   type ServiceHealthDef,
 } from "./data";
@@ -120,9 +121,15 @@ async function probeHealth(
   }
 }
 
-/** Deep-link URL for a service panel, when the product is known. */
+/**
+ * Deep-link URL para la tarjeta de salud de un servicio. Solo devolvemos un
+ * enlace cuando la app tiene frontend público vivo (root = 200); los conectores
+ * internos y placeholders no llevan href para no renderizar enlaces muertos
+ * (ServiceHealthGrid renderiza un <div> sin enlace cuando url es undefined).
+ */
 function serviceUrl(key: string): string | undefined {
-  return PRODUCT_BY_KEY[key]?.url;
+  const p = PRODUCT_BY_KEY[key];
+  return p ? externalHref(p) : undefined;
 }
 
 function useServiceHealth() {
@@ -416,7 +423,10 @@ function SuiteLauncher({ onLaunch }: { onLaunch?: (module: AppModule) => void })
       key: p.key,
       label: p.name,
       icon: <Icon size={18} aria-hidden />,
-      href: p.url,
+      // Solo apps con frontend público vivo abren enlace externo; el resto
+      // (conectores internos / placeholders) navegan a su ficha interna vía
+      // onLaunch para no producir enlaces muertos (404 / DNS fail).
+      href: externalHref(p),
       // El widget oculta módulos cuyo `roles` no incluye el rol del usuario.
       roles,
       description: `${p.tagline} (ex-${p.aka})`,
@@ -446,17 +456,15 @@ function SuiteLauncher({ onLaunch }: { onLaunch?: (module: AppModule) => void })
 const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: "connect-siigo",
+    // Logos es un conector interno (sin UI pública): su root daría 404, así que
+    // el paso no lleva enlace externo muerto; se configura desde la suite.
     label: "Conectar facturación (Siigo / Logos)",
     description: "Vincula tu cuenta de facturación electrónica para emitir documentos.",
-    href: PRODUCT_BY_KEY["logos"]?.url,
-    hrefLabel: "Configurar Logos",
   },
   {
     id: "connect-crm",
     label: "Sincronizar clientes (Mnemosyne)",
     description: "Importa tu base de clientes desde el CRM para personalizar la operación.",
-    href: PRODUCT_BY_KEY["mnemosyne"]?.url,
-    hrefLabel: "Conectar CRM",
   },
   {
     id: "activate-modules",

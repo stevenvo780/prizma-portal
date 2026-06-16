@@ -14,8 +14,8 @@
  * RBAC: una app sin rol permitido se muestra inhabilitada (el usuario ve que
  * existe) salvo módulos internos, que se ocultan a roles no-admin.
  */
-import { ArrowUpRight, Lock, Star } from "lucide-react";
-import { PRODUCTS, type ModuleKey, type Product } from "./data";
+import { ArrowRight, ArrowUpRight, Lock, Star } from "lucide-react";
+import { PRODUCTS, externalHref, type ModuleKey, type Product } from "./data";
 import { useSession, type UserRole } from "./session";
 
 /** Roles que pueden lanzar cada módulo (refleja el gating del Cockpit). */
@@ -47,6 +47,7 @@ function AppCard({ product: p, allowed, onDetail }: AppCardProps) {
   // La portada YA contiene el nombre de la app: el <img> lleva alt descriptivo
   // (a11y) pero NO repetimos el título en texto visible. El riel de la derecha
   // queda para contexto + acciones, dejando respirar la imagen.
+  const href = externalHref(p);
   return (
     <article className="pzl-card" data-module={p.key}>
       <div className="pzl-card__media">
@@ -78,17 +79,7 @@ function AppCard({ product: p, allowed, onDetail }: AppCardProps) {
         <p className="pzl-card__blurb">{p.blurb}</p>
 
         <div className="pzl-card__foot">
-          {allowed ? (
-            <a
-              className="pzl-open"
-              href={p.url}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`Abrir ${p.name} en una pestaña nueva`}
-            >
-              Abrir {p.name} <ArrowUpRight size={16} aria-hidden />
-            </a>
-          ) : (
+          {!allowed ? (
             <span
               className="pzl-detail pzl-detail--locked"
               aria-disabled="true"
@@ -96,6 +87,29 @@ function AppCard({ product: p, allowed, onDetail }: AppCardProps) {
             >
               <Lock size={14} aria-hidden /> Sin acceso
             </span>
+          ) : href ? (
+            // App con frontend público vivo: enlace externo real (root = 200).
+            <a
+              className="pzl-open"
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Abrir ${p.name} en una pestaña nueva`}
+            >
+              Abrir {p.name} <ArrowUpRight size={16} aria-hidden />
+            </a>
+          ) : (
+            // Conector interno / herramienta en desarrollo: sin UI pública.
+            // Abrir su root daría 404 / DNS fail, así que llevamos a la ficha
+            // interna del módulo en lugar de un enlace muerto.
+            <button
+              type="button"
+              className="pzl-open"
+              onClick={() => onDetail(p.key)}
+              aria-label={`Ver ${p.name} en el portal`}
+            >
+              Ver {p.name} <ArrowRight size={16} aria-hidden />
+            </button>
           )}
           <button
             type="button"

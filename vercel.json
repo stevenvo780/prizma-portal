@@ -1,0 +1,6 @@
+{
+  "framework": "vite",
+  "buildCommand": "pnpm --filter prizma-ui run build && pnpm --filter prizma-portal run build",
+  "outputDirectory": "apps/prisma/dist",
+  "installCommand": "pnpm install --frozen-lockfile"
+}

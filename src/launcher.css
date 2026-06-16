@@ -1,0 +1,549 @@
+/* ============================================================================
+   launcher.css — grid de apps image-forward del Portal Prizma.
+
+   Requisitos del owner:
+   - Grid ADAPTABLE: pocas apps -> cards grandes; muchas -> reflow sin orphans.
+     auto-fit + minmax con un mínimo generoso evita cards diminutas perdidas.
+   - Cards ANCHAS con la imagen de marca como protagonista (banner grande arriba).
+   - Marca Cloud Atlas, contraste AA, motion respetuoso con prefers-reduced-motion.
+
+   Prefijo de clase propio del portal: pzl-  (no colisiona con cui-).
+   Todo se ancla a tokens --c-* del design system para heredar tema claro/oscuro.
+   ============================================================================ */
+
+/* ---- Page wrapper -------------------------------------------------------
+   Evita el overflow horizontal: las grids con minmax(Npx,1fr) empujarían el
+   ancho del contenedor flex (min-width:auto) más allá del viewport en móvil.
+   Forzar min-width:0 deja que las grids contraigan a una sola columna. */
+.pzl-page,
+.pzl-page > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* La celda de contenido del AppShell (grid item) tiene min-width:auto por
+   defecto, así que se niega a encoger por debajo de su min-content y desborda
+   en móvil. min-width:0 + overflow-x:clip corrige el overflow para TODAS las
+   vistas del portal sin barra horizontal. (Override a nivel de app; no toca
+   prizma-ui.) */
+.cui-shell__content {
+  min-width: 0;
+  overflow-x: clip;
+}
+
+/* La plantilla del shell usa `1fr` (= minmax(auto,1fr)); el mínimo `auto` toma
+   el min-content de la celda de contenido y desborda en móvil. Forzar
+   minmax(0,1fr) ata el track al ancho disponible. Replica la plantilla de
+   prizma-ui añadiendo el `0` como mínimo. */
+.cui-shell {
+  grid-template-columns: var(--cui-sidebar-w, 256px) minmax(0, 1fr);
+}
+@media (max-width: 768px) {
+  .cui-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- Topbar brand + responsive ----------------------------------------- */
+.pzl-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  padding: 4px 6px;
+  margin-left: -6px;
+  border-radius: var(--c-radius-md);
+  cursor: pointer;
+  color: var(--c-text);
+}
+.pzl-brand:hover {
+  background: var(--c-surface-sunken);
+}
+.pzl-brand:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--c-ring-offset), 0 0 0 4px var(--c-ring);
+}
+.pzl-brand__word {
+  font-family: var(--c-font-display);
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: -0.025em;
+}
+
+/* El topbar es una fila flex sin wrap: limitar su overflow para que nunca
+   genere scroll horizontal de página. El cluster de marca puede encoger. */
+.cui-shell__topbar {
+  min-width: 0;
+  overflow: hidden;
+}
+.pzl-brand {
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+/* Controles opcionales del topbar: ocultos en pantallas medianas/estrechas para
+   que la barra no fuerce overflow horizontal (el menú/sidebar ya cubre la
+   navegación; el tema y el acceso quedan siempre visibles). */
+@media (max-width: 1080px) {
+  .pzl-topbar-secondary {
+    display: none !important;
+  }
+}
+
+/* ---- Hero --------------------------------------------------------------- */
+.pzl-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--c-radius-2xl);
+  border: 1px solid var(--c-border);
+  background: linear-gradient(120deg, #0b1417 0%, #0A1622 52%, #0E6E73 100%);
+  color: #fff;
+  isolation: isolate;
+}
+.pzl-hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+}
+.pzl-hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(11, 20, 23, 0.94) 0%,
+    rgba(11, 20, 23, 0.78) 42%,
+    rgba(11, 20, 23, 0.15) 100%
+  );
+}
+.pzl-hero__body {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 640px;
+  padding: clamp(22px, 5vw, 56px);
+}
+.pzl-hero__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--c-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #43b5a6;
+}
+.pzl-hero__kicker::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #FF5A2B;
+  box-shadow: 0 0 0 4px rgba(255, 90, 43, 0.22);
+}
+.pzl-hero h1 {
+  font-family: var(--c-font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  margin: 14px 0 0;
+  color: #fff;
+  text-wrap: balance;
+}
+.pzl-hero h1 em {
+  font-style: normal;
+  background: linear-gradient(90deg, #43b5a6 0%, #2DCBD1 55%, #e0a85e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.pzl-hero__lede {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.55;
+  color: rgba(236, 254, 255, 0.84);
+  margin: 16px 0 0;
+  max-width: 52ch;
+}
+.pzl-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+/* ---- Section heading ---------------------------------------------------- */
+.pzl-sectionhead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 18px;
+}
+.pzl-sectionhead h2 {
+  font-family: var(--c-font-display);
+  font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.pzl-sectionhead p {
+  color: var(--c-text-muted);
+  margin: 4px 0 0;
+  font-size: var(--c-text-sm);
+}
+
+/* ---- Adaptive grid (cards de DOBLE ANCHO) -------------------------------
+   Las cards son banners horizontales anchos: el mínimo de columna es ~el doble
+   de una card normal (~340px a ~620px). auto-fit reparte el espacio sobrante a
+   1fr, así que:
+     · 1 app sola      : ocupa TODO el ancho (banner pleno).
+     · 2 apps          : dos columnas anchas lado a lado.
+     · 3+ apps         : reflowea sin dejar orphans diminutos.
+   minmax(min(100%, …)) garantiza una sola columna fluida en móvil. */
+.pzl-grid {
+  display: grid;
+  gap: clamp(18px, 1.8vw, 26px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 620px), 1fr));
+}
+/* Con 1-2 apps no queremos columnas estrechas: subimos el mínimo para que
+   crezcan y el banner respire a lo ancho. */
+.pzl-grid--few {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 720px), 1fr));
+}
+/* Lane secundaria (conectores/herramientas): mismas cards banner, algo más
+   compactas para diferenciar la jerarquía sin volverlas miniaturas. */
+.pzl-grid--secondary {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 540px), 1fr));
+}
+
+/* ---- App card (banner horizontal, imagen protagonista) ------------------
+   Dos pistas: la portada (protagonista, ~58% del ancho) + un riel de texto.
+   La portada YA trae el wordmark, por eso no hay título redundante. */
+.pzl-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--c-radius-xl);
+  overflow: hidden;
+  box-shadow: var(--c-shadow-sm);
+  transition: box-shadow var(--c-duration-base) var(--c-ease-standard),
+    transform var(--c-duration-base) var(--c-ease-flow),
+    border-color var(--c-duration-base);
+}
+.pzl-card:hover {
+  box-shadow: var(--c-shadow-lg);
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--c-accent-module) 45%, var(--c-border));
+}
+.pzl-card:focus-within {
+  border-color: var(--c-accent-module);
+  box-shadow: var(--c-shadow-md), 0 0 0 3px var(--c-ring);
+}
+
+/* La portada es la PROTAGONISTA: ocupa la columna izquierda a sangre completa,
+   alto íntegro de la card, sin recortar el wordmark (object-fit: cover con la
+   relación nativa 680×384 cae bien en este alto). */
+.pzl-card__media {
+  position: relative;
+  display: block;
+  min-height: 200px;
+  height: 100%;
+  overflow: hidden;
+  background: #0b1417;
+}
+.pzl-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--c-duration-slow, 480ms) var(--c-ease-flow);
+}
+.pzl-card:hover .pzl-card__img {
+  transform: scale(1.04);
+}
+.pzl-card__tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: var(--c-radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: rgba(11, 20, 23, 0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+.pzl-card__tag--star {
+  color: #0b1417;
+  background: #e0a85e;
+  border-color: transparent;
+}
+
+/* Riel de texto a la derecha del banner. Una hairline de acento del módulo
+   cose visualmente la portada con el texto. */
+.pzl-card__rail {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(18px, 1.8vw, 26px);
+  border-left: 1px solid var(--c-border);
+  background: linear-gradient(
+    180deg,
+    var(--c-surface) 0%,
+    color-mix(in srgb, var(--c-accent-module) 5%, var(--c-surface)) 100%
+  );
+}
+/* Eyebrow de contexto (NO es el título: la imagen ya nombra la app).
+   El TEXTO usa el token neutro legible (AA en claro y oscuro); la identidad de
+   color del módulo vive en la barrita decorativa ::before — donde el bajo
+   contraste de un acento profundo está permitido por WCAG (elemento decorativo).
+   Los acentos de módulo de prizma-ui están afinados para fondo claro, así que
+   colorear el texto con ellos rompería AA sobre la superficie oscura. */
+.pzl-card__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--c-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-text-muted);
+}
+.pzl-card__eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 3px;
+  border-radius: var(--c-radius-full);
+  /* Mezcla con el texto para garantizar visibilidad del swatch en ambos temas
+     sin perder la identidad cromática del módulo. */
+  background: color-mix(in srgb, var(--c-accent-module) 80%, var(--c-text));
+}
+.pzl-card__aka {
+  font-family: var(--c-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--c-text-subtle);
+}
+.pzl-card__blurb {
+  color: var(--c-text-muted);
+  font-size: var(--c-text-sm);
+  line-height: 1.55;
+  margin: 0;
+}
+.pzl-card__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+/* En pantallas estrechas la card se apila: banner arriba, texto abajo. Sigue
+   sin título redundante. */
+@media (max-width: 540px) {
+  .pzl-card {
+    grid-template-columns: 1fr;
+  }
+  .pzl-card__media {
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+  }
+  .pzl-card__rail {
+    border-left: none;
+    border-top: 1px solid var(--c-border);
+  }
+}
+
+/* Botón "Abrir" como enlace real (href). Hereda el acento del módulo. */
+.pzl-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: var(--c-radius-md);
+  background: var(--c-accent-module);
+  color: #fff;
+  font-weight: 600;
+  font-size: var(--c-text-sm);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background var(--c-duration-base) var(--c-ease-standard),
+    box-shadow var(--c-duration-base);
+}
+.pzl-open:hover {
+  background: color-mix(in srgb, var(--c-accent-module) 88%, #000);
+  box-shadow: 0 6px 16px -6px var(--c-accent-module);
+}
+.pzl-open:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--c-ring-offset), 0 0 0 4px var(--c-ring);
+}
+.pzl-detail {
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: var(--c-radius-md);
+  background: transparent;
+  border: 1px solid var(--c-border-interactive);
+  color: var(--c-text-muted);
+  font-weight: 600;
+  font-size: var(--c-text-sm);
+  cursor: pointer;
+  transition: background var(--c-duration-fast), color var(--c-duration-fast);
+}
+.pzl-detail:hover {
+  background: var(--c-surface-sunken);
+  color: var(--c-text);
+}
+.pzl-detail:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--c-ring-offset), 0 0 0 4px var(--c-ring);
+}
+/* Estado "sin acceso": se ve, pero no invita a hacer clic. */
+.pzl-detail--locked {
+  gap: 6px;
+  cursor: not-allowed;
+  opacity: 0.72;
+  border-style: dashed;
+}
+.pzl-detail--locked:hover {
+  background: transparent;
+  color: var(--c-text-muted);
+}
+
+/* ---- Login shell (placeholder, sin auth falsa) -------------------------- */
+.pzl-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--c-radius-md);
+  border: 1px dashed var(--c-border-interactive);
+  background: transparent;
+  color: var(--c-text-muted);
+  font-size: var(--c-text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--c-duration-fast), color var(--c-duration-fast);
+}
+.pzl-login:hover {
+  border-color: var(--c-primary);
+  color: var(--c-text);
+}
+.pzl-login:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--c-ring-offset), 0 0 0 4px var(--c-ring);
+}
+.pzl-login__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e0a85e;
+}
+
+/* ---- Footer / contacto -------------------------------------------------- */
+.pzl-footer {
+  border-top: 1px solid var(--c-border);
+  margin-top: 48px;
+  padding-top: 28px;
+  display: grid;
+  gap: 20px 40px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  color: var(--c-text-muted);
+  font-size: var(--c-text-sm);
+}
+.pzl-footer h3 {
+  font-family: var(--c-font-display);
+  font-size: 0.95rem;
+  margin: 0 0 8px;
+  color: var(--c-text);
+}
+.pzl-footer a {
+  color: var(--c-primary-text);
+  text-decoration: none;
+}
+.pzl-footer a:hover {
+  text-decoration: underline;
+}
+.pzl-footer__todo {
+  font-family: var(--c-font-mono);
+  font-size: 11px;
+  color: var(--c-text-subtle);
+}
+
+/* ---- Enlaces: contraste AA, nunca azul "sin estilo" ---------------------
+   Antes los <a> heredaban el azul del navegador (rgb(0,0,238)), que rompe la
+   identidad Cloud Atlas y el contraste sobre el fondo oscuro. Estilamos todos
+   los enlaces dentro del Portal con el teal de marca (token --c-primary-text,
+   afinado por prizma-ui para AA en claro/oscuro) y subrayado solo al hover. */
+.cui-shell a:not([class]),
+.cui-shell a.pzl-text-link,
+.pzl-footer a,
+.pzl-page a:not([class]) {
+  color: var(--c-primary-text, #43b5a6);
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 3px;
+  transition: color var(--c-duration-fast, 120ms);
+}
+.cui-shell a:not([class]):hover,
+.pzl-footer a:hover,
+.pzl-page a:not([class]):hover {
+  color: var(--c-primary, #2dcbd1);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.cui-shell a:focus-visible,
+.pzl-footer a:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--c-ring-offset), 0 0 0 4px var(--c-ring);
+}
+
+/* ---- Spinner del botón "Re-escanear / Verificar salud" ------------------ */
+@keyframes pzl-spin {
+  to { transform: rotate(360deg); }
+}
+.pzl-spin {
+  animation: pzl-spin 0.9s linear infinite;
+}
+
+/* ---- Motion: respetar prefers-reduced-motion ---------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .pzl-card,
+  .pzl-card__img,
+  .pzl-open,
+  .pzl-detail,
+  .pzl-login {
+    transition: none !important;
+  }
+  .pzl-card:hover {
+    transform: none;
+  }
+  .pzl-card:hover .pzl-card__img {
+    transform: none;
+  }
+  .pzl-spin {
+    animation: none;
+  }
+}

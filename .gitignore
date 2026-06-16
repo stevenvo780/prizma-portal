@@ -1,5 +1,5 @@
 
-# --- olympo push safety (secrets & build artifacts) ---
+# --- prizma push safety (secrets & build artifacts) ---
 node_modules/
 dist/
 .next/
@@ -23,3 +23,4 @@ id_rsa*
 *serviceAccount*.json
 *service-account*.json
 *credentials*.json
+.vercel

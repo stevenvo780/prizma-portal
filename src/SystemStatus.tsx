@@ -1,8 +1,14 @@
 import * as React from "react";
-import { Badge, Button, Card, CardBody, CardHeader, Spinner } from "@olympo/ui";
-import { SERVICE_HEALTH, type ServiceHealthDef } from "./data";
+import { Badge, Button, Card, CardBody, CardHeader, Spinner } from "prizma-ui";
+import { RefreshCw } from "lucide-react";
+import { SERVICE_HEALTH, PRODUCT_BY_KEY, type ServiceHealthDef } from "./data";
 
-type Health = "up" | "down" | "checking";
+/**
+ * "checking" = sondeo en curso · "up" = el host respondió · "unknown" = no
+ * verificable cross-origin (conector sin dominio público). NUNCA usamos un
+ * estado "down" en rojo por una comprobación que el navegador no puede hacer.
+ */
+type Health = "up" | "unknown" | "checking";
 
 interface ServiceState {
   def: ServiceHealthDef;
@@ -10,21 +16,29 @@ interface ServiceState {
   latencyMs?: number;
 }
 
-/** Build the dev health URL for a service from its port + healthPath. */
-function healthUrl(def: ServiceHealthDef): string {
-  return `http://localhost:${def.port}${def.healthPath}`;
+/**
+ * URL pública del /health del servicio. Solo las apps de cara al cliente tienen
+ * subdominio verificable; los conectores internos devuelven null -> "unknown".
+ */
+function publicHealthUrl(def: ServiceHealthDef): string | null {
+  const product = PRODUCT_BY_KEY[def.key];
+  if (!product?.url || !product.customerFacing) return null;
+  try {
+    const base = new URL(product.url);
+    return `${base.origin}${def.healthPath}`;
+  } catch {
+    return null;
+  }
 }
 
 /**
- * Probe a single service's /health. Tolerant by design: any network/CORS error,
- * timeout, or non-OK response is reported as "down" instead of throwing.
- *
- * We use `mode: "no-cors"` so a reachable-but-CORS-restricted backend still
- * resolves (as an opaque response) and counts as "up" — we only need to know
- * the socket answered, not read the body.
+ * Sonda tolerante. Con `mode:"no-cors"` la respuesta es opaca: si llega, el
+ * host respondió -> "up". Si no hay URL pública o no responde, devolvemos
+ * "unknown" (neutro), no "caído": no podemos afirmar una caída que no medimos.
  */
-async function probe(def: ServiceHealthDef, timeoutMs = 3000): Promise<{ status: Health; latencyMs: number }> {
-  const url = healthUrl(def);
+async function probe(def: ServiceHealthDef, timeoutMs = 4000): Promise<{ status: Health; latencyMs?: number }> {
+  const url = publicHealthUrl(def);
+  if (!url) return { status: "unknown" };
   const started = performance.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
@@ -36,11 +50,10 @@ async function probe(def: ServiceHealthDef, timeoutMs = 3000): Promise<{ status:
       signal: ctrl.signal,
     });
     const latencyMs = Math.round(performance.now() - started);
-    // Opaque (no-cors) responses have status 0 but mean the server answered.
-    const ok = res.type === "opaque" || res.ok;
-    return { status: ok ? "up" : "down", latencyMs };
+    const answered = res.type === "opaque" || res.ok;
+    return answered ? { status: "up", latencyMs } : { status: "unknown", latencyMs };
   } catch {
-    return { status: "down", latencyMs: Math.round(performance.now() - started) };
+    return { status: "unknown" };
   } finally {
     clearTimeout(timer);
   }
@@ -72,7 +85,7 @@ export function SystemStatus() {
   }, [runScan]);
 
   const up = states.filter((s) => s.status === "up").length;
-  const down = states.filter((s) => s.status === "down").length;
+  const unknown = states.filter((s) => s.status === "unknown").length;
   const total = states.length;
 
   return (
@@ -81,15 +94,22 @@ export function SystemStatus() {
         <div>
           <h2 style={{ fontSize: 24 }}>Estado del sistema</h2>
           <p style={{ color: "var(--c-text-muted)" }}>
-            Salud de cada servicio del ecosistema (sondeo a <code>/health</code> vía{" "}
-            <code>@olympo/contracts</code>). Tolerante a CORS y errores de red.
+            Salud de cada servicio del ecosistema. Las apps con dominio público se
+            sondean en vivo a <code>/health</code>; los conectores internos no son
+            verificables desde el navegador y se muestran en estado neutro.
           </p>
         </div>
         <div className="cui-row" style={{ gap: 8 }}>
-          <Badge tone="success">{up} arriba</Badge>
-          {down > 0 && <Badge tone="danger">{down} caídos</Badge>}
-          <Button variant="secondary" size="sm" onClick={runScan} disabled={scanning}>
-            {scanning ? "Sondeando…" : "↻ Re-escanear"}
+          <Badge tone={up > 0 ? "success" : "neutral"}>{up} verificado{up !== 1 ? "s" : ""}</Badge>
+          {unknown > 0 && <Badge tone="neutral">{unknown} sin verificar</Badge>}
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={runScan}
+            disabled={scanning}
+            leftIcon={<RefreshCw size={14} aria-hidden className={scanning ? "pzl-spin" : undefined} />}
+          >
+            {scanning ? "Sondeando…" : "Re-escanear"}
           </Button>
         </div>
       </div>
@@ -97,10 +117,11 @@ export function SystemStatus() {
       <Card>
         <CardHeader
           title="Servicios backend"
-          subtitle={`${total} servicios registrados · puertos de @olympo/contracts SERVICES`}
+          subtitle={`${total} servicios registrados · puertos de prizma-contracts SERVICES`}
           action={scanning ? <Spinner size={18} /> : undefined}
         />
-        <CardBody style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        {/* A11Y-06: aria-live para anunciar resultados de re-escaneo a AT */}
+        <CardBody style={{ display: "flex", flexDirection: "column", gap: 4 }} aria-live="polite" aria-atomic="false">
           {states.map(({ def, status, latencyMs }) => (
             <div
               key={def.key}
@@ -118,7 +139,7 @@ export function SystemStatus() {
                 <div style={{ minWidth: 0 }}>
                   <div style={{ fontWeight: 600 }}>{def.name}</div>
                   <div style={{ fontSize: 12, color: "var(--c-text-subtle)" }}>
-                    <code>localhost:{def.port}{def.healthPath}</code>
+                    <code>{endpointLabel(def)}</code>
                   </div>
                 </div>
               </div>
@@ -136,8 +157,19 @@ export function SystemStatus() {
   );
 }
 
+/** Endpoint legible: host público si lo hay, si no, etiqueta neutra. */
+function endpointLabel(def: ServiceHealthDef): string {
+  const url = publicHealthUrl(def);
+  if (!url) return "conector interno · sin endpoint público";
+  try {
+    return new URL(url).host;
+  } catch {
+    return "endpoint no disponible";
+  }
+}
+
 function StatusBadge({ status }: { status: Health }) {
-  if (status === "checking") return <Badge tone="neutral" dot>…</Badge>;
-  if (status === "up") return <Badge tone="success" dot>UP</Badge>;
-  return <Badge tone="danger" dot>down</Badge>;
+  if (status === "checking") return <Badge tone="info" dot>Comprobando</Badge>;
+  if (status === "up") return <Badge tone="success" dot>Operativo</Badge>;
+  return <Badge tone="neutral" dot>Sin verificar</Badge>;
 }

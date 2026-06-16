@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 384" width="680" height="384" role="img" aria-label="Prizma — la suite" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="hero_ground" x1="0" y1="0" x2="680" y2="384" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b1417"/><stop offset="0.6" stop-color="#0A1622"/><stop offset="1" stop-color="#0E6E73"/>
+    </linearGradient>
+    <radialGradient id="hero_glow" cx="0.22" cy="0.4" r="0.75">
+      <stop offset="0" stop-color="#2DCBD1" stop-opacity="0.4"/><stop offset="1" stop-color="#2DCBD1" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="680" height="384" fill="url(#hero_ground)"/>
+  <rect width="680" height="384" fill="url(#hero_glow)"/>
+  <path d="M150 150 L720 120 L720 146 L150 162 Z" fill="#22A45A" opacity="0.72"/>
+    <path d="M150 150 L720 148.57142857142856 L720 174.57142857142856 L150 162 Z" fill="#1FB85C" opacity="0.72"/>
+    <path d="M150 150 L720 177.14285714285714 L720 203.14285714285714 L150 162 Z" fill="#2DCBD1" opacity="0.72"/>
+    <path d="M150 150 L720 205.71428571428572 L720 231.71428571428572 L150 162 Z" fill="#2E90FA" opacity="0.72"/>
+    <path d="M150 150 L720 234.28571428571428 L720 260.2857142857143 L150 162 Z" fill="#6366F1" opacity="0.72"/>
+    <path d="M150 150 L720 262.8571428571429 L720 288.8571428571429 L150 162 Z" fill="#8B5CF6" opacity="0.72"/>
+    <path d="M150 150 L720 291.42857142857144 L720 317.42857142857144 L150 162 Z" fill="#E8A90B" opacity="0.72"/>
+    <path d="M150 150 L720 320 L720 346 L150 162 Z" fill="#FF5A2B" opacity="0.72"/>
+  <g transform="translate(150 156)">
+    <path d="M0 -86 L92 86 L-92 86 Z" fill="#ffffff" opacity="0.07"/>
+    <path d="M0 -86 L92 86 L-92 86 Z" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2.5"/>
+    <circle cx="-3" cy="-60" r="8" fill="#FF5A2B"/>
+  </g>
+  <path d="M-10 150 L60 168" stroke="#ffffff" stroke-opacity="0.55" stroke-width="4" stroke-linecap="round"/>
+</svg>

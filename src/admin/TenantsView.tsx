@@ -274,7 +274,7 @@ function OrgModal({ open, onClose, onGuardar, inicial, titulo }: OrgModalProps) 
   // Sincroniza cuando se abre con datos iniciales distintos (edición)
   React.useEffect(() => {
     if (open) setForm(inicial ?? FORM_VACÍO);
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [open, inicial]);
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -289,6 +289,9 @@ function OrgModal({ open, onClose, onGuardar, inicial, titulo }: OrgModalProps) 
 
   const puedeGuardar = form.nombre.trim() !== "" && form.email.trim() !== "";
 
+  // Detecta si hay cambios comparando la forma actual con la inicial.
+  const hayChangios = inicial ? JSON.stringify(form) !== JSON.stringify(inicial) : true;
+
   const footer = (
     <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
       <Button variant="secondary" onClick={onClose}>
@@ -296,7 +299,7 @@ function OrgModal({ open, onClose, onGuardar, inicial, titulo }: OrgModalProps) 
       </Button>
       <Button
         variant="primary"
-        disabled={!puedeGuardar}
+        disabled={!puedeGuardar || !hayChangios}
         onClick={() => { onGuardar(form); onClose(); }}
       >
         Guardar organización

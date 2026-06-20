@@ -276,9 +276,27 @@ function HubActivity() {
   // Base timestamp captured once so the feed is stable across re-renders.
   const baseRef = React.useRef(Date.now());
   const [events, setEvents] = React.useState<HubEvent[]>(() => buildEvents(baseRef.current));
-  const [hasBackend] = React.useState(false); // tolerante: sin backend mostramos demo
+  const [hasBackend, setHasBackend] = React.useState(false);
   const [requeueId, setRequeueId] = React.useState<string | null>(null);
   const [requeuing, setRequeuing] = React.useState(false);
+
+  // Detectar si el Hub está disponible probando un endpoint básico.
+  React.useEffect(() => {
+    const checkBackend = async () => {
+      try {
+        const res = await fetch("/api/v1/dlq/requeue", {
+          method: "OPTIONS",
+          mode: "no-cors",
+          cache: "no-store",
+        });
+        // Si el servidor responde (even opaque), hay backend vivo.
+        setHasBackend(true);
+      } catch {
+        setHasBackend(false);
+      }
+    };
+    void checkBackend();
+  }, []);
 
   const dlq = events.filter((e) => e.outcome === "dlq");
 

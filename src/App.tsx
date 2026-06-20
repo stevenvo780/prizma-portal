@@ -76,11 +76,11 @@ function Symbol({ size = 32 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 96 96" fill="none" aria-label="Prizma">
       <defs>
         <linearGradient id="c" x1="8" y1="88" x2="88" y2="8" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#0A1622" /><stop offset="0.58" stopColor="#0B8A8F" /><stop offset="1" stopColor="#2DCBD1" />
+          <stop offset="0" stopColor="#0c0e10" /><stop offset="0.58" stopColor="#d4622e" /><stop offset="1" stopColor="#43b5a6" />
         </linearGradient>
       </defs>
       <rect x="2" y="2" width="92" height="92" rx="24" fill="url(#c)" />
-      <circle cx="68" cy="32" r="8" fill="#FF5A2B" />
+      <circle cx="68" cy="32" r="8" fill="#f0b94a" />
       <path d="M60 44 L88 74 L40 74 Z" fill="#fff" opacity="0.55" />
       <path d="M34 28 L72 74 L6 74 Z" fill="#fff" opacity="0.95" />
     </svg>
@@ -442,8 +442,8 @@ function LandingView({ onNavigate }: { onNavigate: (v: View) => void }) {
           </div>
         </div>
         <Card><CardBody>
-          {/* RESPONSIVE-01: overflow-x evita desbordamiento en móvil */}
-          <div style={{ overflowX: "auto" }}>
+          {/* RESPONSIVE-01: overflow-x evita desbordamiento en móvil con scroll-shadow cue */}
+          <div style={{ overflowX: "auto", backgroundImage: "linear-gradient(90deg, transparent 0%, white 30%), linear-gradient(90deg, white 70%, transparent 100%)", backgroundPosition: "left, right", backgroundRepeat: "repeat-y", backgroundSize: "20px 100%, 20px 100%", backgroundAttachment: "local, local" }}>
           <div className="cui-row cui-row--wrap" style={{ gap: 8 }}>
             {FLOW.map((s, i) => (
               <div key={i} className="cui-row" style={{ gap: 8 }}>
@@ -685,13 +685,15 @@ export function App() {
     }
   }, [tour]);
 
-  // Gating de seguridad: un usuario no-admin nunca debe quedar en una vista de
-  // administración (p. ej. tras bajar su rol con el selector de demo).
+  // Gating de seguridad: si el rol baja y la vista actual es admin, resetear a home.
+  // Esto se hace ANTES de renderizar, no en useEffect, para evitar flashes.
+  const effectiveView = user.role !== "admin" && ADMIN_VIEWS.has(view) ? "home" : view;
+  // Una sola vez: cuando efectiveView cambia, actualizar el estado (evita re-renders infinitos).
   React.useEffect(() => {
-    if (user.role !== "admin" && ADMIN_VIEWS.has(view)) {
-      setView("home");
+    if (effectiveView !== view) {
+      setView(effectiveView);
     }
-  }, [user.role, view]);
+  }, [effectiveView, view]);
 
   // Al iniciar el tutorial, vuelve al Cockpit para que los anclajes existan.
   const startTour = React.useCallback(() => {
@@ -699,14 +701,14 @@ export function App() {
     tour.start(0);
   }, [tour]);
 
-  const isAdminView = ADMIN_VIEWS.has(view);
+  const isAdminView = ADMIN_VIEWS.has(effectiveView);
 
   let content: React.ReactNode;
-  if (view === "home") content = <CockpitView onNavigate={setView} onOpenStatus={() => setView("status")} />;
-  else if (view === "landing") content = <LandingView onNavigate={setView} />;
-  else if (view === "status") content = <SystemStatus />;
+  if (effectiveView === "home") content = <CockpitView onNavigate={setView} onOpenStatus={() => setView("status")} />;
+  else if (effectiveView === "landing") content = <LandingView onNavigate={setView} />;
+  else if (effectiveView === "status") content = <SystemStatus />;
   else if (isAdminView && user.role !== "admin") {
-    // Defensa en profundidad: aunque el sidebar oculta admin, bloqueamos el render.
+    // No debería ocurrir si effectiveView resetea, pero defensa en profundidad.
     content = (
       <Card><CardBody>
         No tienes permisos para ver esta sección.{" "}
@@ -714,14 +716,14 @@ export function App() {
       </CardBody></Card>
     );
   }
-  else if (view === "admin:tenants") content = <TenantsView />;
-  else if (view === "admin:users") content = <UsersRolesView />;
-  else if (view === "admin:modules") content = <ModulesView />;
-  else if (view === "admin:connectors") content = <ConnectorsView />;
-  else if (view === "admin:monitor") content = <EventMonitorView />;
-  else if (view === "admin:audit") content = <AuditView />;
-  else if (view === "admin:billing") content = <BillingView />;
-  else content = <ProductView moduleKey={view} onNavigate={setView} />;
+  else if (effectiveView === "admin:tenants") content = <TenantsView />;
+  else if (effectiveView === "admin:users") content = <UsersRolesView />;
+  else if (effectiveView === "admin:modules") content = <ModulesView />;
+  else if (effectiveView === "admin:connectors") content = <ConnectorsView />;
+  else if (effectiveView === "admin:monitor") content = <EventMonitorView />;
+  else if (effectiveView === "admin:audit") content = <AuditView />;
+  else if (effectiveView === "admin:billing") content = <BillingView />;
+  else content = <ProductView moduleKey={effectiveView} onNavigate={setView} />;
 
   return (
     <PrizmaRoot module="portal">

@@ -5,6 +5,7 @@
  * marcado TODO: no se inventa el número.
  */
 import { Mail, MapPin } from "lucide-react";
+import { CONTACT_EMAIL, CONTACT_OWNER, SUITE_URL } from "./config";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -21,12 +22,12 @@ export function SiteFooter() {
       <div>
         <h3>Contacto</h3>
         <p style={{ margin: 0, display: "flex", flexDirection: "column", gap: 6 }}>
-          <span>Steven Vallejo</span>
+          <span>{CONTACT_OWNER}</span>
           <a
-            href="mailto:stevenvallejo780@gmail.com"
+            href={`mailto:${CONTACT_EMAIL}`}
             style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
           >
-            <Mail size={14} aria-hidden /> stevenvallejo780@gmail.com
+            <Mail size={14} aria-hidden /> {CONTACT_EMAIL}
           </a>
           <span
             className="pzl-footer__todo"
@@ -41,7 +42,7 @@ export function SiteFooter() {
       <div>
         <h3>Suite</h3>
         <p style={{ margin: 0, lineHeight: 1.7 }}>
-          <a href="https://prisma-enterprice.cloud/">prisma-enterprice.cloud</a>
+          <a href={SUITE_URL}>prisma-enterprice.cloud</a>
           <br />
           <span className="pzl-footer__todo">
             Diseño unificado con prizma-ui · eventos con prizma-contracts
@@ -50,7 +51,7 @@ export function SiteFooter() {
       </div>
 
       <div style={{ gridColumn: "1 / -1", paddingTop: 8, borderTop: "1px solid var(--c-border)", color: "var(--c-text-subtle)" }}>
-        © {year} Prizma — Steven Vallejo. Todos los derechos reservados.
+        © {year} Prizma — {CONTACT_OWNER}. Todos los derechos reservados.
       </div>
     </footer>
   );

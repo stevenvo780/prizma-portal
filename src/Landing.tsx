@@ -26,16 +26,16 @@ import {
   Play,
 } from "lucide-react";
 import { PRODUCTS, externalHref, type Product } from "./data";
+import { CONTACT_EMAIL, CONTACT_OWNER } from "./config";
 import "./landing.css";
 
-const CONTACT_EMAIL = "stevenvallejo780@gmail.com";
 const MAILTO_DEMO =
-  "mailto:stevenvallejo780@gmail.com" +
+  `mailto:${CONTACT_EMAIL}` +
   "?subject=" +
   encodeURIComponent("Quiero una demo de Prizma") +
   "&body=" +
   encodeURIComponent(
-    "Hola Steven,\n\nMe interesa conocer la suite Prizma para mi negocio. " +
+    `Hola ${CONTACT_OWNER},\n\nMe interesa conocer la suite Prizma para mi negocio. ` +
       "Estos son mis datos:\n\nNombre:\nNegocio:\nTeléfono:\n\nGracias.",
   );
 
@@ -45,13 +45,13 @@ function Symbol({ size = 30 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 96 96" fill="none" aria-hidden>
       <defs>
         <linearGradient id="lp-sym" x1="8" y1="88" x2="88" y2="8" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#0A1622" />
-          <stop offset="0.58" stopColor="#0B8A8F" />
-          <stop offset="1" stopColor="#2DCBD1" />
+          <stop offset="0" stopColor="#0c0e10" />
+          <stop offset="0.58" stopColor="#d4622e" />
+          <stop offset="1" stopColor="#43b5a6" />
         </linearGradient>
       </defs>
       <rect x="2" y="2" width="92" height="92" rx="24" fill="url(#lp-sym)" />
-      <circle cx="68" cy="32" r="8" fill="#FF5A2B" />
+      <circle cx="68" cy="32" r="8" fill="#f0b94a" />
       <path d="M60 44 L88 74 L40 74 Z" fill="#fff" opacity="0.55" />
       <path d="M34 28 L72 74 L6 74 Z" fill="#fff" opacity="0.95" />
     </svg>
@@ -62,11 +62,11 @@ function Symbol({ size = 30 }: { size?: number }) {
 
 /** Color de cada rayo del espectro (orden del prisma, de arriba a abajo). */
 const SPECTRUM: { key: Product["key"]; label: string; color: string }[] = [
-  { key: "hermes", label: "Hermes", color: "#22A45A" },
-  { key: "iris", label: "Iris", color: "#2DCBD1" },
-  { key: "talanton", label: "Talanton", color: "#67E2E6" },
-  { key: "pistis", label: "Pistis", color: "#e0a85e" },
-  { key: "talaria", label: "Talaria", color: "#FF5A2B" },
+  { key: "hermes", label: "Hermes", color: "#f0b94a" },
+  { key: "iris", label: "Iris", color: "#43b5a6" },
+  { key: "talanton", label: "Talanton", color: "#2a7a70" },
+  { key: "pistis", label: "Pistis", color: "#d4622e" },
+  { key: "talaria", label: "Talaria", color: "#f0b94a" },
 ];
 
 /**

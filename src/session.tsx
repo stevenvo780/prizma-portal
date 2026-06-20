@@ -42,8 +42,8 @@ export interface SessionValue {
   tenant: Tenant;
   /** Todos los tenants disponibles para este usuario */
   tenants: Tenant[];
-  /** Cambia el tenant activo por su id */
-  setTenant: (id: string) => void;
+  /** Cambia el tenant activo por su id. Retorna true si el tenant existe y se cambió, false si no se encontró. */
+  setTenant: (id: string) => boolean;
   /**
    * Cambia el rol del usuario actual. Solo para demostrar el gating por rol en
    * el portal; en producción el rol proviene del proveedor de identidad y este
@@ -96,9 +96,14 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   const [tenant, setTenantState] = React.useState<Tenant>(DEMO_SESSION.tenant);
   const [role, setRoleState] = React.useState<UserRole>(DEMO_SESSION.user.role);
 
-  const setTenant = React.useCallback((id: string) => {
+  const setTenant = React.useCallback((id: string): boolean => {
     const found = DEMO_SESSION.tenants.find((t) => t.id === id);
-    if (found) setTenantState(found);
+    if (found) {
+      setTenantState(found);
+      return true;
+    }
+    // Tenant no encontrado: retorna false sin cambiar estado.
+    return false;
   }, []);
 
   const setRole = React.useCallback((next: UserRole) => {

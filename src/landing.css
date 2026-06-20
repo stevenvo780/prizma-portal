@@ -16,24 +16,24 @@
 
 /* ---- Lienzo de la landing ----------------------------------------------- */
 .lp {
-  --lp-navy: #0a1622;
-  --lp-navy-2: #0b1417;
-  --lp-teal: #2dcbd1;
-  --lp-teal-deep: #0e6e73;
-  --lp-gold: #e0a85e;
-  --lp-vermilion: #ff5a2b;
-  --lp-ink: #ecfeff;
-  --lp-ink-dim: rgba(236, 254, 255, 0.66);
-  --lp-ink-faint: rgba(236, 254, 255, 0.42);
-  --lp-line: rgba(103, 226, 230, 0.16);
+  --lp-navy: #0c0e10;
+  --lp-navy-2: #16120e;
+  --lp-teal: #43b5a6;
+  --lp-teal-deep: #2a7a70;
+  --lp-gold: #f0b94a;
+  --lp-vermilion: #d4622e;
+  --lp-ink: #f0ece6;
+  --lp-ink-dim: rgba(240, 236, 230, 0.66);
+  --lp-ink-faint: rgba(240, 236, 230, 0.42);
+  --lp-line: rgba(67, 181, 166, 0.16);
   --lp-surface: rgba(255, 255, 255, 0.035);
 
   min-height: 100vh;
   color: var(--lp-ink);
   background:
-    radial-gradient(1200px 620px at 78% -8%, rgba(45, 203, 209, 0.16), transparent 60%),
-    radial-gradient(900px 540px at 2% 4%, rgba(14, 110, 115, 0.22), transparent 58%),
-    linear-gradient(180deg, var(--lp-navy-2) 0%, var(--lp-navy) 46%, #07131b 100%);
+    radial-gradient(1200px 620px at 78% -8%, rgba(67, 181, 166, 0.16), transparent 60%),
+    radial-gradient(900px 540px at 2% 4%, rgba(42, 122, 112, 0.22), transparent 58%),
+    linear-gradient(180deg, var(--lp-navy-2) 0%, var(--lp-navy) 46%, #08151d 100%);
   font-family: var(--c-font-body, Inter, system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
@@ -137,12 +137,12 @@
 }
 .lp-cta--solid {
   background: linear-gradient(95deg, var(--lp-teal-deep), var(--lp-teal));
-  color: #042024;
-  box-shadow: 0 8px 24px -10px rgba(45, 203, 209, 0.7);
+  color: #f0ece6;
+  box-shadow: 0 8px 24px -10px rgba(67, 181, 166, 0.7);
 }
 .lp-cta--solid:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px -10px rgba(45, 203, 209, 0.78);
+  box-shadow: 0 14px 30px -10px rgba(67, 181, 166, 0.78);
 }
 .lp-cta--ghost {
   background: transparent;
@@ -211,7 +211,7 @@
 }
 .lp-hero h1 em {
   font-style: normal;
-  background: linear-gradient(96deg, var(--lp-teal) 0%, #67e2e6 42%, var(--lp-gold) 100%);
+  background: linear-gradient(96deg, var(--lp-teal) 0%, #63d4c4 42%, var(--lp-gold) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -524,11 +524,11 @@
   border-radius: 28px;
   overflow: hidden;
   padding: clamp(36px, 6vw, 72px);
-  border: 1px solid rgba(103, 226, 230, 0.22);
+  border: 1px solid rgba(67, 181, 166, 0.22);
   background:
-    radial-gradient(700px 380px at 88% 20%, rgba(45, 203, 209, 0.2), transparent 62%),
-    radial-gradient(560px 320px at 6% 90%, rgba(224, 168, 94, 0.14), transparent 60%),
-    linear-gradient(150deg, #0c1c25, #08151d);
+    radial-gradient(700px 380px at 88% 20%, rgba(67, 181, 166, 0.2), transparent 62%),
+    radial-gradient(560px 320px at 6% 90%, rgba(240, 185, 74, 0.14), transparent 60%),
+    linear-gradient(150deg, #0d1318, #08151d);
 }
 .lp-contact__grid {
   display: grid;

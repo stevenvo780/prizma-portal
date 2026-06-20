@@ -56,11 +56,14 @@ export interface Product {
 // Per-service base URLs — configurable via VITE_* env vars for production deployments.
 // Fallback to localhost ports used in local development.
 //
-// Shim: prefiere el prefijo NUEVO (VITE_HERMES_URL…) y cae al VIEJO (VITE_GRAF_URL…)
-// para no romper despliegues que aún tienen los nombres antiguos en Vercel.
-// Una VITE_*_URL vacía ("") en Vercel NO debe ganarle al fallback: con `??`
-// el string vacío se considera "definido" y producía hrefs vacíos -> enlaces
-// muertos. Tratamos "" (y solo-espacios) como ausente y caemos al fallback.
+// Precedencia de env vars (en orden):
+// 1. VITE_<APP>_URL (nuevo nombre)
+// 2. VITE_<LEGACY>_URL (nombre antiguo, p. ej. VITE_GRAF_URL)
+// 3. fallback (subdominio en prod o localhost en dev)
+//
+// Nota: una VITE_*_URL vacía ("") en Vercel NO debe ganarle al fallback.
+// Con `??` el string vacío se considera "definido" y causa hrefs rotos.
+// El helper `pick()` trata "" (y solo-espacios) como ausente.
 const pick = (...vals: (string | undefined)[]): string | undefined =>
   vals.find((v) => typeof v === "string" && v.trim() !== "");
 

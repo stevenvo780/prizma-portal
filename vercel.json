@@ -1,8 +1,8 @@
 {
   "framework": "vite",
-  "buildCommand": "pnpm --filter prizma-ui run build && pnpm --filter prizma-portal run build",
-  "outputDirectory": "apps/prisma/dist",
-  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
   "rewrites": [
     { "source": "/((?!assets/|covers/|favicon\\.svg|symbol\\.svg).*)", "destination": "/index.html" }
   ]

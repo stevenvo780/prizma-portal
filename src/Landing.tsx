@@ -402,11 +402,11 @@ function Contact() {
                     <dt>Suite</dt>
                     <dd>
                       <a
-                        href="https://prisma-enterprice.cloud"
+                        href="https://prizma.cloud"
                         target="_blank"
                         rel="noreferrer"
                       >
-                        prisma-enterprice.cloud
+                        prizma.cloud
                       </a>
                     </dd>
                   </div>

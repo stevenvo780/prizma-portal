@@ -51,7 +51,7 @@ interface BusEvent {
 const DEMO_EVENTS: BusEvent[] = [
   { eventId: "evt-00192", tipo: "pedido.pagado",          source: "Hermes (Graf)",          prioridad: "alta",  estado: "procesado", ts: "2026-06-14 14:37:02", intentos: 1,  latenciaMs: 82  },
   { eventId: "evt-00191", tipo: "customer.update",        source: "Mnemosyne (ApiSoftia)",  prioridad: "baja",  estado: "procesado", ts: "2026-06-14 14:36:55", intentos: 1,  latenciaMs: 47  },
-  { eventId: "evt-00190", tipo: "delivery.create",        source: "Talaria (MeraVuelta)",   prioridad: "alta",  estado: "reintento", ts: "2026-06-14 14:36:44", intentos: 3,  latenciaMs: 310 },
+  { eventId: "evt-00190", tipo: "delivery.create",        source: "Talaria",   prioridad: "alta",  estado: "reintento", ts: "2026-06-14 14:36:44", intentos: 3,  latenciaMs: 310 },
   { eventId: "evt-00189", tipo: "invoice.create",         source: "Logos (ApiSigo)",        prioridad: "alta",  estado: "procesado", ts: "2026-06-14 14:36:30", intentos: 1,  latenciaMs: 135 },
   { eventId: "evt-00188", tipo: "notification.whatsapp",  source: "Iris (EMW)",             prioridad: "media", estado: "DLQ",       ts: "2026-06-14 14:35:58", intentos: 5,  latenciaMs: 0   },
   { eventId: "evt-00187", tipo: "pedido.cancelado",       source: "Hermes (Graf)",          prioridad: "media", estado: "procesado", ts: "2026-06-14 14:35:21", intentos: 1,  latenciaMs: 61  },
@@ -59,7 +59,7 @@ const DEMO_EVENTS: BusEvent[] = [
   { eventId: "evt-00185", tipo: "pos.cierre",             source: "Talanton (Sinergia)",    prioridad: "baja",  estado: "procesado", ts: "2026-06-14 14:34:02", intentos: 1,  latenciaMs: 44  },
   { eventId: "evt-00184", tipo: "rpa.tarea.completada",   source: "Talos (Automatización)", prioridad: "media", estado: "reintento", ts: "2026-06-14 14:33:29", intentos: 2,  latenciaMs: 520 },
   { eventId: "evt-00183", tipo: "notification.whatsapp",  source: "Iris (EMW)",             prioridad: "media", estado: "procesado", ts: "2026-06-14 14:32:45", intentos: 1,  latenciaMs: 78  },
-  { eventId: "evt-00182", tipo: "delivery.update",        source: "Talaria (MeraVuelta)",   prioridad: "baja",  estado: "DLQ",       ts: "2026-06-14 14:31:18", intentos: 5,  latenciaMs: 0   },
+  { eventId: "evt-00182", tipo: "delivery.update",        source: "Talaria",   prioridad: "baja",  estado: "DLQ",       ts: "2026-06-14 14:31:18", intentos: 5,  latenciaMs: 0   },
   { eventId: "evt-00181", tipo: "invoice.anulada",        source: "Logos (ApiSigo)",        prioridad: "alta",  estado: "procesado", ts: "2026-06-14 14:30:55", intentos: 1,  latenciaMs: 110 },
   { eventId: "evt-00180", tipo: "pedido.pagado",          source: "Hermes (Graf)",          prioridad: "alta",  estado: "procesado", ts: "2026-06-14 14:30:12", intentos: 1,  latenciaMs: 74  },
   { eventId: "evt-00179", tipo: "customer.update",        source: "Mnemosyne (ApiSoftia)",  prioridad: "baja",  estado: "DLQ",       ts: "2026-06-14 14:29:38", intentos: 5,  latenciaMs: 0   },

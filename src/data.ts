@@ -47,7 +47,7 @@ export interface Product {
   star?: boolean;
   internal?: boolean;
   /**
-   * Customer-facing app with a live subdomain on prisma-enterprice.cloud.
+   * Customer-facing app with a live subdomain on prizma.cloud.
    * These get the big image-forward hero grid; the rest go in a quieter lane.
    */
   customerFacing?: boolean;
@@ -81,7 +81,7 @@ const env = (key: string, fallback: string, legacyKey?: string): string =>
 // ese valor gana sobre el subdominio. El segundo parámetro (devHint) queda
 // documentado como el puerto local sugerido para cada app.
 const sub = (host: string, _devHint: string): string =>
-  `https://${host}.prisma-enterprice.cloud`;
+  `https://${host}.prizma.cloud`;
 
 // The Prizma pantheon — stable technical key + Greek public name (+ legacy alias).
 export const PRODUCTS: Product[] = [
@@ -105,9 +105,9 @@ export const PRODUCTS: Product[] = [
     url: env("VITE_PISTIS_URL", sub("pistis", "http://localhost:4030"), "VITE_FIAR_URL"),
     tagline: "Crédito sin interés y control de cartera.",
     blurb: "Ofrece crédito sin interés a tus clientes y controla la cartera con trazabilidad: cupos, abonos y recordatorios automáticos por WhatsApp." },
-  { key: "talaria", name: "Talaria", aka: "Mera Vuelta", line: "Operación",
+  { key: "talaria", name: "Talaria", aka: "Talaria", line: "Operación",
     customerFacing: true, cover: "/covers/talaria.svg",
-    url: env("VITE_TALARIA_URL", sub("talaria", "http://localhost:4040"), "VITE_MERAVUELTA_URL"),
+    url: env("VITE_TALARIA_URL", sub("talaria", "http://localhost:4040")),
     tagline: "Logística y entregas con tracking.",
     blurb: "Logística de última milla: asignación automática de domiciliarios, rutas y seguimiento en vivo. Cada entrega trazable de la orden a la puerta." },
   { key: "logos", name: "Logos", aka: "ApiSigo", line: "Conector",

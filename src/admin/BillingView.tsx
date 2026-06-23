@@ -112,7 +112,7 @@ const MODULE_SUBS: ModuleSub[] = [
   {
     key: "talaria",
     name: "Talaria",
-    aka: "Mera Vuelta",
+    aka: "Talaria",
     plan: "Básico",
     price: PLAN_PRICES["Básico"],
     active: true,

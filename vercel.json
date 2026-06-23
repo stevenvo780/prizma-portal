@@ -1,8 +1,8 @@
 {
   "framework": "vite",
-  "buildCommand": "npx tsc -b && npx vite build",
+  "buildCommand": "npx vite build",
   "outputDirectory": "dist",
-  "installCommand": "NODE_ENV=development npm install",
+  "installCommand": "npm install",
   "rewrites": [
     { "source": "/((?!assets/|covers/|favicon\\.svg|symbol\\.svg).*)", "destination": "/index.html" }
   ]

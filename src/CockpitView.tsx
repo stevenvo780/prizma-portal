@@ -59,7 +59,7 @@ import { useSession, type UserRole } from "./session";
 
 /**
  * URL pública del servicio para el sondeo. Preferimos el subdominio real de
- * cada módulo de cara al cliente (p. ej. https://hermes.prizma.cloud)
+ * cada módulo de cara al cliente (p. ej. https://hermes.prisma-enterprice.cloud)
  * sobre el localhost de desarrollo: así, en producción, el chequeo apunta al
  * host vivo y no a un puerto local inexistente. Si la app no expone una URL
  * pública (conectores internos), devolvemos null -> estado neutro, nunca rojo.
@@ -82,7 +82,7 @@ function publicHealthUrl(def: ServiceHealthDef): string | null {
 /**
  * Sonda tolerante de un servicio.
  *
- * Realidad cross-origin: el portal vive en prizma.cloud y no puede
+ * Realidad cross-origin: el portal vive en prisma-enterprice.cloud y no puede
  * leer el cuerpo de un /health en otro subdominio (CORS). Con `no-cors` la
  * respuesta es opaca: si llega, el socket respondió -> "up". Si no hay URL
  * pública o el host no responde, NO marcamos "down" (rojo alarmante): lo

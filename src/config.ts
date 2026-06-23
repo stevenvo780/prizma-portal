@@ -15,4 +15,4 @@ export const CONTACT_OWNER =
 
 /** URL de la suite (dominio público). */
 export const SUITE_URL =
-  import.meta.env.VITE_SUITE_URL ?? "https://prizma.cloud";
+  import.meta.env.VITE_SUITE_URL ?? "https://prisma-enterprice.cloud";

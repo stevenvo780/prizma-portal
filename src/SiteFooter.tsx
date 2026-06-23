@@ -42,7 +42,7 @@ export function SiteFooter() {
       <div>
         <h3>Suite</h3>
         <p style={{ margin: 0, lineHeight: 1.7 }}>
-          <a href={SUITE_URL}>prizma.cloud</a>
+          <a href={SUITE_URL}>prisma-enterprice.cloud</a>
           <br />
           <span className="pzl-footer__todo">
             Diseño unificado con prizma-ui · eventos con prizma-contracts

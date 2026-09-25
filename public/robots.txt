@@ -1,0 +1,9 @@
+# Prizma portal — canonical host: prisma-enterprise.cloud (HZ-PRI-01/02)
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /cockpit
+Disallow: /launcher
+
+Sitemap: https://prisma-enterprise.cloud/sitemap.xml

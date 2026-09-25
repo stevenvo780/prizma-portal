@@ -4,6 +4,9 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "rewrites": [
-    { "source": "/((?!assets/|covers/|favicon\\.svg|symbol\\.svg).*)", "destination": "/index.html" }
+    {
+      "source": "/((?!assets/|covers/|favicon\\.svg|symbol\\.svg|robots\\.txt|sitemap\\.xml|og-.*|icon-.*|apple-touch-icon\\.png|favicon\\.ico|favicon-.*\\.png|isotipo\\.png|logo\\.png|wordmark\\.png).*)",
+      "destination": "/index.html"
+    }
   ]
 }

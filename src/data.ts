@@ -47,7 +47,8 @@ export interface Product {
   star?: boolean;
   internal?: boolean;
   /**
-   * Customer-facing app with a live subdomain on prisma-enterprice.cloud.
+   * Customer-facing app with a live subdomain on prisma-enterprise.cloud
+   * (correct spelling; typo host prisma-enterprice.cloud is legacy until Deploys 301).
    * These get the big image-forward hero grid; the rest go in a quieter lane.
    */
   customerFacing?: boolean;
@@ -81,7 +82,7 @@ const env = (key: string, fallback: string, legacyKey?: string): string =>
 // ese valor gana sobre el subdominio. El segundo parámetro (devHint) queda
 // documentado como el puerto local sugerido para cada app.
 const sub = (host: string, _devHint: string): string =>
-  `https://${host}.prisma-enterprice.cloud`;
+  `https://${host}.prisma-enterprise.cloud`;
 
 // The Prizma pantheon — stable technical key + Greek public name (+ legacy alias).
 export const PRODUCTS: Product[] = [
